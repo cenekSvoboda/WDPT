@@ -486,7 +486,11 @@ d.keyboardHandlerFunction=function()
 		d.moveVertically=true;
 		--d.speedVertically;
 	}
-
+	if(d.inArray(d.zmacklyCudliky,85)){
+		//hh.innerHTML += "u";
+		d.growVertically=true;
+		--d.growthVertically;
+	}
 	if(d.inArray(d.zmacklyCudliky,65)){
 		//hh.innerHTML += "a";
 		d.moveHorizontally=true;
@@ -523,15 +527,9 @@ d.keyboardHandlerFunction=function()
 		d.growHorizontally=true;
 		++d.growthHorizontally;
 	}
-	if(d.inArray(d.zmacklyCudliky,85)){
-		//hh.innerHTML += "u";
-		d.growVertically=true;
-		--d.growthVertically;
-	}
 	if(d.inArray(d.zmacklyCudliky,76)){
 		//hh.innerHTML += "l";
 	}
-
 	if(d.inArray(d.zmacklyCudliky,90)){
 		//hh.innerHTML += "z";
 	}
