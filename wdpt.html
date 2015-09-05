@@ -4,7 +4,7 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
 <meta name="description" content="WDPT - Web Designer's Productivity Tool - website layout editor - create HTML and CSS using keyboard and mouse directly in your web browser (WYSIWYG)."/>
 <title>
-	WDPT - Web Designer's Productivity Tool - website layout editor 3.00
+	WDPT - Web Designer's Productivity Tool - website layout editor 4.0
 </title>
 <style type="text/css">
 *{margin:0px;padding:0px;}
@@ -36,7 +36,7 @@ d.imgDir='./files';
  */
 var MOOPH=(function(){if(typeof window.performance==='undefined'){window.performance={};}if(!window.performance.now){window.performance.now=function(){return new Date().getTime();};}var _pts=[];return {createPseudoThread:function(){var _ptid=_pts.length;_pts[_ptid]={};_pts[_ptid].p=true;_pts[_ptid].imflt=false;_pts[_ptid].imbc=true;_pts[_ptid].td=1;_pts[_ptid].md=0;_pts[_ptid].lt=0;_pts[_ptid].ct=window;_pts[_ptid].ft=function(ptid){if(_pts[ptid].p===true){return;}var now=window.performance.now();if(now>_pts[ptid].lt+_pts[ptid].md){var imbc=_pts[ptid].imbc;if(!imbc){_pts[ptid].funct.call(_pts[ptid].ct,_pts[ptid].prms);}if(_pts[ptid].imflt){_pts[ptid].lt+=_pts[ptid].md;}else{if(!imbc){_pts[ptid].lt=window.performance.now();}else{_pts[ptid].lt=now;}}if(imbc){_pts[ptid].funct.call(_pts[ptid].ct,_pts[ptid].prms);}}var fun=function(){_pts[ptid].ft(ptid);};setTimeout(fun,_pts[ptid].td);};return {setFunction:function(funct){_pts[_ptid].funct=funct;},setContext:function(cont){_pts[_ptid].ct=cont;},setParameters:function(pr){_pts[_ptid].prms=pr;},setTimeoutDelay:function(td){_pts[_ptid].td=td;},setMeasuredDelay:function(md){_pts[_ptid].md=md;},setMeasuredFromLastTime:function(imflt){_pts[_ptid].imflt=imflt;},setMeasuredBeforeCall:function(imbc){_pts[_ptid].imbc=imbc;},start:function(){_pts[_ptid].p=false;_pts[_ptid].lt=window.performance.now();_pts[_ptid].ft(_ptid);},pause:function(){_pts[_ptid].p=true;}};}};}());
 // copyright 2009-2015 Cenek Svoboda, svobo.c@gmail.com
-d.help = '\nWelcome to "Web Designer\'s Productivity Tool" from wdpt.eu!\n\nTo make your website more correct, try finding and using a validator and follow their instructions. \nNote, that the tool works the same in all browsers, but your result (the combination of components) may work differently, because different browsers have different box model rendering engines. \n\nHow do you use this? To "execute" it, open it in a browser locally (save the page first). To show images inserted into another directory, edit the image directory field in "menu".\n\nThe primary peripheral used to control this software is the keyboard.\nT - Show text representation of layout (this is probably why you use this tool...). If you want to copy/paste HTML, copy/paste it with the comment that is following the markup. You may modify generated content as you wish, but don\'t edit and don\'t remove that comment!\nM - Show menu. Enter text editing mode to change things in menu. \n` (the key on the left side from key 1 on some keyboards) - Enter text editing mode (this means you can change some things like image src, image directory or width of centred layout). To edit image alt text, edit the normal text of the non-image and then switch the component to image.\nBN - Make next or "before" structure the current one.\nIO - Insert structure before or add after current structure.\nASDW - Position of current structure (use Q mode for pixel precision).\nHJKL - Size of current structure "vi style" (use Q mode for pixel precision).\nFG - Change background (default is 0), if background is -1, the structure becomes image, if background is -2, the structure gets background image, control image using menu.\nZX - Change positioning style of structure (what you\'ve done is shown in the menu).\n\n\nClick on structure to \'select\' it. There\'s a simple drag and drop.\n\nThere\'s also a save in the JSON feature, "save as" in your browser (not in all browsers).\n\nIf you want to create fixed-width centred layout, set it up in menu.\n\ncopyright 2009-2015 Cenek Svoboda, svobo.c@gmail.com';
+d.help = '\nWelcome to "Web Designer\'s Productivity Tool" from wdpt.eu!\n\nTo make your website more correct, try finding and using a validator and follow their instructions. \nNote, that the tool works the same in all browsers, but your result (the combination of components) may work differently, because different browsers have different box model rendering engines. \n\nHow do you use this? To "execute" it, open it in a browser locally (save the page first). To show images inserted into another directory, edit the image directory field in "menu".\n\nThe primary peripheral used to control this software is the keyboard.\nT - Show text representation of layout (this is probably why you use this tool...). If you want to copy/paste HTML, copy/paste it with the comment that is following the markup. You may modify generated content as you wish, but don\'t edit and don\'t remove that comment!\nM - Show menu. Enter text editing mode to change things in menu. \n` (the key on the left side from key 1 on some keyboards) - Enter text editing mode (this means you can change some things like image src, image directory or width of centred layout). To edit image alt text, edit the normal text of the non-image and then switch the component to image.\nBN - Make next or "before" structure the current one.\nIO - Insert structure before or add after current structure.\nASDW - Position of current structure (use Q mode for pixel precision).\nUHJK - Size of current structure (use Q mode for pixel precision).\nFG - Change background (default is 0), if background is -1, the structure becomes image, if background is -2, the structure gets background image, control image using menu.\nZX - Change positioning style of structure (what you\'ve done is shown in the menu).\n\n\nClick on structure to \'select\' it. There\'s a simple drag and drop.\n\nThere\'s also a save in the JSON feature, "save as" in your browser (not in all browsers).\n\nIf you want to create fixed-width centred layout, set it up in menu.\n\ncopyright 2009-2015 Cenek Svoboda, svobo.c@gmail.com';
 w=window;
 d.colorz=["transparent","aliceblue","antiquewhite","aqua","aquamarine","azure","beige","bisque","black","blanchedalmond","blue","blueviolet","brown","burlywood","cadetblue","chartreuse","chocolate","coral","cornflowerblue","cornsilk","crimson","cyan","darkblue","darkcyan","darkgoldenrod","darkgray","darkgreen","darkkhaki","darkmagenta","darkolivegreen","darkorange","darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkturquoise","darkviolet","deeppink","deepskyblue","dimgray","dodgerblue","firebrick","floralwhite","forestgreen","fuchsia","gainsboro","ghostwhite","gold","goldenrod","gray","green","greenyellow","honeydew","hotpink","indianred","indigo","ivory","khaki","lavender","lavenderblush","lawngreen","lemonchiffon","lightblue","lightcoral","lightcyan","lightgoldenrodyellow","lightgreen","lightgrey","lightpink","lightsalmon","lightseagreen","lightskyblue","lightslategray","lightsteelblue","lightyellow","lime","limegreen","linen","magenta","maroon","mediumaquamarine","mediumblue","mediumorchid","mediumpurple","mediumseagreen","mediumslateblue","mediumspringgreen","mediumturquoise","mediumvioletred","midnightblue","mintcream","mistyrose","moccasin","navajowhite","navy","oldlace","olive","olivedrab","orange","orangered","orchid","palegoldenrod","palegreen","paleturquoise","palevioletred","papayawhip","peachpuff","peru","pink","plum","powderblue","purple","red","rosybrown","royalblue","saddlebrown","salmon","sandybrown","seagreen","seashell","sienna","silver","skyblue","slateblue","slategray","snow","springgreen","steelblue","tan","teal","thistle","tomato","turquoise","violet","wheat","white","whitesmoke","yellow","yellowgreen"];
 d.positioningStrings=["position:relative;float:none;","position:relative;float:left;","position:relative;float:right;","position:absolute;","position:fixed;"];
@@ -183,6 +183,9 @@ d.keydown=function(eve)
 		}
 		if(vu===85){ 
 			// "u" 
+			if(d.pixelPrecision){
+				--d.components[d.actualStructure][4];
+			}
 		}
 		if(vu===73){ 
 			// "i" 
@@ -275,14 +278,11 @@ d.keydown=function(eve)
 		if(vu===75){ 
 			// "k" 
 			if(d.pixelPrecision){
-				--d.components[d.actualStructure][4];
+				++d.components[d.actualStructure][3];
 			}
 		}
 		if(vu===76){ 
 			// "l" 
-			if(d.pixelPrecision){
-				++d.components[d.actualStructure][3];
-			}
 		}
 		if(vu===90){ 
 			// "z" 
@@ -520,13 +520,16 @@ d.keyboardHandlerFunction=function()
 	}
 	if(d.inArray(d.zmacklyCudliky,75)){
 		//hh.innerHTML += "k";
+		d.growHorizontally=true;
+		++d.growthHorizontally;
+	}
+	if(d.inArray(d.zmacklyCudliky,85)){
+		//hh.innerHTML += "u";
 		d.growVertically=true;
 		--d.growthVertically;
 	}
 	if(d.inArray(d.zmacklyCudliky,76)){
 		//hh.innerHTML += "l";
-		d.growHorizontally=true;
-		++d.growthHorizontally;
 	}
 
 	if(d.inArray(d.zmacklyCudliky,90)){
@@ -557,15 +560,15 @@ d.stopperFunction=function()
 		d.moveVertically=false;
 		d.speedVertically=0;
 	}
-	if(!d.inArray(d.zmacklyCudliky,74)&&!d.inArray(d.zmacklyCudliky,75)){
+	if(!d.inArray(d.zmacklyCudliky,74)&&!d.inArray(d.zmacklyCudliky,85)){
 		//hh.innerHTML += "j";
-		//hh.innerHTML += "k";
+		//hh.innerHTML += "u";
 		d.growVertically=false;
 		d.growthVertically=0;
 	}
-	if(!d.inArray(d.zmacklyCudliky,72)&&!d.inArray(d.zmacklyCudliky,76)){
+	if(!d.inArray(d.zmacklyCudliky,72)&&!d.inArray(d.zmacklyCudliky,75)){
 		//hh.innerHTML += "h";
-		//hh.innerHTML += "l";
+		//hh.innerHTML += "k";
 		d.growHorizontally=false;
 		d.growthHorizontally=0;
 	}
