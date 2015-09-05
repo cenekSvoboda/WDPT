@@ -1,0 +1,854 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="cs" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<meta name="description" content="WDPT - Web Designer's Productivity Tool (nástroj pro produktivitu webdesignera) - editor webových layoutů - vytvoř HTML a CSS použitím myši a klávesnice přímo ve svém webovém prohlížeči (WYSIWYG)."/>
+<title>
+	WDPT - Web Designer's Productivity Tool (nástroj pro produktivitu webdesignera) - editor webových layoutů 4.0
+</title>
+<style type="text/css">
+*{margin:0px;padding:0px;}
+</style>
+</head>
+<body>
+<div id="root">
+</div>
+<div id="text">
+</div>
+<div id="menuHolder">
+</div>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+d=document;
+d.components=[];
+d.centered=false;
+d.layoutWidth=1000;
+d.imgDir='./files';
+//--><!]]>
+</script>
+<div id="jsonData">
+</div>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+/*
+ * MOOPH = Module for Object Oriented Pseudomultithreaded Hypertext
+ * Copyright 2013-2015 Cenek Svoboda, svobo.c@gmail.com
+ */
+var MOOPH=(function(){if(typeof window.performance==='undefined'){window.performance={};}if(!window.performance.now){window.performance.now=function(){return new Date().getTime();};}var _pts=[];return {createPseudoThread:function(){var _ptid=_pts.length;_pts[_ptid]={};_pts[_ptid].p=true;_pts[_ptid].imflt=false;_pts[_ptid].imbc=true;_pts[_ptid].td=1;_pts[_ptid].md=0;_pts[_ptid].lt=0;_pts[_ptid].ct=window;_pts[_ptid].ft=function(ptid){if(_pts[ptid].p===true){return;}var now=window.performance.now();if(now>_pts[ptid].lt+_pts[ptid].md){var imbc=_pts[ptid].imbc;if(!imbc){_pts[ptid].funct.call(_pts[ptid].ct,_pts[ptid].prms);}if(_pts[ptid].imflt){_pts[ptid].lt+=_pts[ptid].md;}else{if(!imbc){_pts[ptid].lt=window.performance.now();}else{_pts[ptid].lt=now;}}if(imbc){_pts[ptid].funct.call(_pts[ptid].ct,_pts[ptid].prms);}}var fun=function(){_pts[ptid].ft(ptid);};setTimeout(fun,_pts[ptid].td);};return {setFunction:function(funct){_pts[_ptid].funct=funct;},setContext:function(cont){_pts[_ptid].ct=cont;},setParameters:function(pr){_pts[_ptid].prms=pr;},setTimeoutDelay:function(td){_pts[_ptid].td=td;},setMeasuredDelay:function(md){_pts[_ptid].md=md;},setMeasuredFromLastTime:function(imflt){_pts[_ptid].imflt=imflt;},setMeasuredBeforeCall:function(imbc){_pts[_ptid].imbc=imbc;},start:function(){_pts[_ptid].p=false;_pts[_ptid].lt=window.performance.now();_pts[_ptid].ft(_ptid);},pause:function(){_pts[_ptid].p=true;}};}};}());
+// copyright 2009-2015 Cenek Svoboda, svobo.c@gmail.com
+d.help = '\nVítej ve "Web Designer\'s Productivity Tool" z wdpt.eu!\n\nAbys měl svou webovou stránku korektní, najdi a používej validátor (řiď se jejich instrukcemi). \nChtěl bych poznamenat, že tento nástroj funguje stejně ve všech prohlížečích, ale tvůj výsledek (kombinace struktur) nemusí být stejný, protože prohlížeče mají různé způsoby vykreslování. \n\nJak toto použít? "Spuštění" proveď tak, že si uložíš tuto "stránku" lokálně. K zobrazení obrázků umístěných v jiném adresáři, edituj pole adresář obrázků v menu (spusť editaci textu).\n\nPrimární periferie používaná k práci s tímto software je klávesnice.\nT - Zobraz textovou reprezentaci layoutu (to je pravděpodobně důvod proč používáš tento nástroj) Pokud chceš kopírovat/vložit HTML, kopíruj/vlož jej s komentářem, který následuje za HTML. Můžeš libovolně editovat generovaný obsah, ale needituj a neodstraňuj tento komentář.\nM - Zobraz menu. Přepni se do módu pro editaci textu, abys mohl měnit obsah menu. \n` (klávesa vlevo od klávesy 1 na anglické klávesnici) - Vstup do módu pro editaci textu (to znamená že můžeš měnit věci jako src u obrázků, adresář obrázků nebo šířku vystředěného layoutu). Abys změnil alt obrázku, edituj běžný text a potom přepni strukturu na obrázek. \nBN - Přepni se na předchozí nebo následující strukturu. \nIO - Vlož strukturu před nebo za strukturu.\nASDW - Změň pozici aktuální struktury (použij Q k přesnosti na pixely).\nUHJK - Změň rozměry aktuální struktury (použij Q k přesnosti na pixely).\nFG - Změň pozadí (defaultně je 0). Jestliže je pozadí -1, struktura se stane obrázkem. Jestliže je pozadí -2, struktura získá obrázek na pozadí. Ovládej obrázek pomocí editace textu v menu. \nZX - Změň způsob pozicování struktury (výsledek je v menu).\n\n\nKlikni na strukturu, abys ji nastavil jako aktuální. V projektu je implementováno jednoduché přetahování struktur. \n\nV projektu je možnost ukládat rozpracovaný layout, ulož stránku jako ve svém prohlížeči (nefunguje ve všech prohlížečích). \n\nPokud chceš vytvořit centrovaný layout s fixní šířkou, nastav to v menu.\n\ncopyright 2009-2015 Čeněk Svoboda, svobo.c@gmail.com';
+w=window;
+d.colorz=["transparent","aliceblue","antiquewhite","aqua","aquamarine","azure","beige","bisque","black","blanchedalmond","blue","blueviolet","brown","burlywood","cadetblue","chartreuse","chocolate","coral","cornflowerblue","cornsilk","crimson","cyan","darkblue","darkcyan","darkgoldenrod","darkgray","darkgreen","darkkhaki","darkmagenta","darkolivegreen","darkorange","darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkturquoise","darkviolet","deeppink","deepskyblue","dimgray","dodgerblue","firebrick","floralwhite","forestgreen","fuchsia","gainsboro","ghostwhite","gold","goldenrod","gray","green","greenyellow","honeydew","hotpink","indianred","indigo","ivory","khaki","lavender","lavenderblush","lawngreen","lemonchiffon","lightblue","lightcoral","lightcyan","lightgoldenrodyellow","lightgreen","lightgrey","lightpink","lightsalmon","lightseagreen","lightskyblue","lightslategray","lightsteelblue","lightyellow","lime","limegreen","linen","magenta","maroon","mediumaquamarine","mediumblue","mediumorchid","mediumpurple","mediumseagreen","mediumslateblue","mediumspringgreen","mediumturquoise","mediumvioletred","midnightblue","mintcream","mistyrose","moccasin","navajowhite","navy","oldlace","olive","olivedrab","orange","orangered","orchid","palegoldenrod","palegreen","paleturquoise","palevioletred","papayawhip","peachpuff","peru","pink","plum","powderblue","purple","red","rosybrown","royalblue","saddlebrown","salmon","sandybrown","seagreen","seashell","sienna","silver","skyblue","slateblue","slategray","snow","springgreen","steelblue","tan","teal","thistle","tomato","turquoise","violet","wheat","white","whitesmoke","yellow","yellowgreen"];
+d.positioningStrings=["position:relative;float:none;","position:relative;float:left;","position:relative;float:right;","position:absolute;","position:fixed;"];
+d.root='root';
+d.zmacklyCudliky=[];
+d.count=function(someArray)
+{
+	return someArray.length;
+};
+d.append=function(someAr,what) 
+{
+	var someArL=d.count(someAr); 
+	someAr[someArL]=what;
+	return someAr;
+};
+d.removeByContent=function(someArr,whatt)
+{
+	var someArrcount=d.count(someArr); 
+	var iii=someArrcount-1;
+	for(;iii>=0;){
+		if(someArr[iii]===whatt){
+			someArr.splice(iii,1);
+		}
+		--iii;
+	}
+	return someArr;
+};
+d.last=function(someAra) 
+{
+	var someAraL=d.count(someAra); 
+	return someAra[someAraL-1];
+};
+d.error=function(whattt)
+{
+	throw new Error(whattt);
+};
+d.find=function(what)
+{
+	return document.getElementById(what);
+};
+d.write=function(whaat)
+{
+	var hu=d.find(d.root);
+	hu.innerHTML+=whaat;
+};
+d.singleE=function(which,id,ad)
+{
+	if(!ad){
+		var ad="";
+	}
+	if (id&&id!==''){
+		ad=' '+ad;
+	}
+	return '<'+which+ad+'/>';
+};
+d.doubleE=function(which,content,id,ad)
+{
+	if(id&&id!=='') {
+		ad=' id="'+id+'" '+ad;
+	}
+	return '<'+which+ad+'>'+content+'</'+which+'>';
+};
+d.inArray=function(someArrra,what)
+{
+	var arraLen=d.count(someArrra);
+	var ijj=0;
+	for(;ijj<arraLen;){
+		if(someArrra[ijj]===what){
+			return true;
+		}
+		++ijj;
+	}
+	return false;
+};
+d.saveInJSON=function()
+{
+	var compoRepre="d.components=[";
+	var compoCount=d.count(d.components);
+	var lll=0;
+	for(;lll<compoCount;){
+		compoRepre+="['"+d.components[lll][0]+"',"+d.components[lll][1]+","+d.components[lll][2]+","+d.components[lll][3]+","+d.components[lll][4]+",'"+d.components[lll][5]+"',"+d.components[lll][6]+","+d.components[lll][7]+",'"+d.components[lll][8]+"']";
+		if(lll<(compoCount-1)){
+			compoRepre+=",";
+		}
+		++lll;
+	}
+	compoRepre+="];";
+	if(d.centered){
+		compoRepre+="d.centered=true;";
+	}else{
+		compoRepre+="d.centered=false;";
+	}
+	compoRepre+="d.layoutWidth="+d.layoutWidth+";";
+	compoRepre+="d.imgDir='"+d.imgDir+"';";
+	var jsonData='<script type="text/javascript">'+compoRepre+'</script>';
+	d.find("jsonData").innerHTML=jsonData;
+
+};
+d.keyup=function(eve) 
+{
+	var ef=eve||window.event;
+	var vu=ef.keyCode;
+	if((vu>=65&&vu<=90)||(vu>=48&&vu<=57)){
+	}else{
+		return;
+	}
+	if(d.inArray(d.zmacklyCudliky,vu)){
+		d.zmacklyCudliky=d.removeByContent(d.zmacklyCudliky,vu);
+	}
+};
+d.keydown=function(eve) 
+{
+	var ef=eve||window.event;
+	var vu=ef.keyCode;
+	if((vu>=65&&vu<=90)||(vu>=48&&vu<=57)||vu===192){
+		//var hh = d.find(d.components[d.actualStructure][0]);
+		if(vu===81){ 
+			// "q" 
+		}
+		if(vu===87){ 
+			// "w" 
+			if(d.pixelPrecision){
+				--d.components[d.actualStructure][2];
+			}
+		}
+		if(vu===69){ 
+			// "e" 
+		}
+		if(vu===82){ 
+			// "r" 
+		}
+		if(vu===84){ 
+			// "t" switch from designer mode to text representation mode
+			if(!d.textMode){
+				d.textDrawingFinished=false;
+				d.textMode=true;
+			}else{
+				//d.textDrawingFinished=true;
+				d.textMode=false;
+			}
+		}
+		if(vu===89){ 
+			// "y"
+		}
+		if(vu===85){ 
+			// "u" 
+			if(d.pixelPrecision){
+				--d.components[d.actualStructure][4];
+			}
+		}
+		if(vu===73){ 
+			// "i" 
+			var structuCount=d.count(d.components);
+			var actuStrup=d.actualStructure;
+			var ikk=structuCount;
+			for(;ikk>actuStrup;){
+				d.components[ikk]=d.components[ikk-1];
+				var iCount=d.count(d.components[ikk]);
+				var jjj=0;
+				for(;jjj<iCount;){
+					d.components[ikk][jjj]=d.components[ikk-1][jjj];
+					++jjj;
+				}
+				--ikk;
+			}
+			d.components[actuStrup]=["divak"+structuCount,0,0,100,100,"no content",0,1,'foo.jpg'];
+			d.actualStructure=actuStrup;
+		}
+		if(vu===79){ 
+			// "o" 
+			var structuCount=d.count(d.components);
+			var actuStrup=d.actualStructure+1;
+			var ikk=structuCount;
+			for(;ikk>actuStrup;){
+				d.components[ikk]=d.components[ikk-1];
+				var iCount=d.count(d.components[ikk]);
+				var jjj=0;
+				for(;jjj<iCount;){
+					d.components[ikk][jjj]=d.components[ikk-1][jjj];
+					++jjj;
+				}
+				--ikk;
+			}
+			d.components[actuStrup]=["divak"+structuCount,0,0,100,100,"no content",0,1,'foo.jpg'];
+			d.actualStructure=actuStrup;
+		}
+		if(vu===80){ 
+			// "p" 
+		}
+		if(vu===65){ 
+			// "a" 
+			if(d.pixelPrecision){
+				--d.components[d.actualStructure][1];
+			}
+		}
+		if(vu===83){ 
+			// "s" 
+			if(d.pixelPrecision){
+				++d.components[d.actualStructure][2];
+			}
+		}
+		if(vu===68){ 
+			// "d" 
+			if(d.pixelPrecision){
+				++d.components[d.actualStructure][1];
+			}
+		}
+		if(vu===70){ 
+			// "f" 
+			var colorCount=d.count(d.colorz);
+			if(d.components[d.actualStructure][6]===-2){
+				d.components[d.actualStructure][6]=colorCount-1;
+			}else{
+				--d.components[d.actualStructure][6];
+			}
+
+		}
+		if(vu===71){ 
+			// "g" 
+			var colorCount=d.count(d.colorz);
+			if(d.components[d.actualStructure][6]===colorCount-1){
+				d.components[d.actualStructure][6]=-2;
+			}else{
+				++d.components[d.actualStructure][6];
+			}
+		}
+		if(vu===72){ 
+			// "h"
+			if(d.pixelPrecision){
+				--d.components[d.actualStructure][3];
+			}
+		}
+		if(vu===74){ 
+			// "j" 
+			if(d.pixelPrecision){
+				++d.components[d.actualStructure][4];
+			}
+		}
+		if(vu===75){ 
+			// "k" 
+			if(d.pixelPrecision){
+				++d.components[d.actualStructure][3];
+			}
+		}
+		if(vu===76){ 
+			// "l" 
+		}
+		if(vu===90){ 
+			// "z" 
+			var positioningCount=d.count(d.positioningStrings);
+			if(d.components[d.actualStructure][7]===positioningCount-1){
+				d.components[d.actualStructure][7]=0;
+			}else{
+				++d.components[d.actualStructure][7];
+			}
+		}
+		if(vu===88){ 
+			// "x" 
+			var positioningCount=d.count(d.positioningStrings);
+			if(d.components[d.actualStructure][7]===0){
+				d.components[d.actualStructure][7]=positioningCount-1;
+			}else{
+				--d.components[d.actualStructure][7];
+			}
+		}
+		if(vu===67){ 
+			// "c" 
+		}
+		if(vu===86){ 
+			// "v" 
+		}
+		if(vu===66){ 
+			// "b"
+			var structuCount=d.count(d.components);
+			if(d.actualStructure===0){
+				d.actualStructure=structuCount-1;
+			}else{
+				--d.actualStructure;
+			}
+			d.makeNoneditableMenu();
+		}
+		if(vu===78){ 
+			// "n" 
+			var structuCount=d.count(d.components);
+			if(d.actualStructure===structuCount-1){
+				d.actualStructure=0;
+			}else{
+				++d.actualStructure;
+			}
+			d.makeNoneditableMenu();
+
+		}
+		if(vu===77){ 
+			// "m" 
+			d.makeNoneditableMenu();
+			if(d.showMenu){
+				d.showMenu=false;
+			}else{
+				d.showMenu=true;
+			}
+		}
+		if(vu===192){ 
+			// "`" 
+			if(ef.preventDefault){
+				ef.preventDefault();
+			}
+			d.makeEditableMenu();
+			if (d.components[d.actualStructure][6] === -1) {
+				//alert("To edit alt, change content to text with background color instead of image and perform the change, then switch back to image mode...");
+			} else {
+				d.components[d.actualStructure][5]=d.doubleE("textarea",d.components[d.actualStructure][5],"textarea_"+d.components[d.actualStructure][0],'');
+			}
+			d.drawFunction();
+			d.doesTextEditation=true;
+			document.onkeyup=function(){};
+			document.onkeydown=function(eey)
+			{
+				var ef=eey||window.event;
+				var vu=ef.keyCode;
+				if(vu===192){
+					document.onkeydown=d.keydown;
+					document.onkeyup=d.keyup;
+					var textAreaContent=d.find("textarea_"+d.components[d.actualStructure][0]);
+					if(textAreaContent){
+						d.components[d.actualStructure][5]=d.hatmatilkaSpecialChars(textAreaContent.value);
+					}else{
+					}
+					var imagePathInputStuff=d.find("imagePath");
+					d.imgDir=imagePathInputStuff.value;
+					d.layoutWidth=d.find("layoutWidthInput").value;
+					var imageSrcInputStuff=d.find("imageSrc");
+					if(imageSrcInputStuff) {
+						d.components[d.actualStructure][8]=imageSrcInputStuff.value;
+					}
+					d.makeNoneditableMenu();
+					d.doesTextEditation=false;
+				}
+			};
+			d.startTextEditation=true;
+		}
+	}else{
+		return;
+	}
+	if(!d.inArray(d.zmacklyCudliky,vu)){
+		d.zmacklyCudliky=d.append(d.zmacklyCudliky,vu);
+	}
+};
+d.toggleCentered=function()
+{
+	if(d.centered){
+		d.centered=false;
+	}else{
+		d.centered=true;
+	}
+};
+d.layoutControlEditable=function()
+{
+	var adC="";
+	if(d.centered){
+		adC=' checked="checked"';
+	}
+	var layCont='&nbsp;<span style="color:gray;">Centrovaný layout: </span><input type="checkbox" '+adC+' id="layoutCheckbox" onclick="d.toggleCentered();"/>&nbsp;<span style="color:gray;">Šířka layoutu: </span><input id="layoutWidthInput" type="text" value="'+d.layoutWidth+'"/>';
+	return layCont;
+};
+d.layoutControlNonEditable=function()
+{
+	var adL="";
+	if(d.centered){
+		adL=' checked="checked"';
+	}
+	var layCon='&nbsp;<span style="color:gray;">Centrovaný layout: </span><input type="checkbox" '+adL+' disabled="disabled"/>&nbsp;<span style="color:gray;">Šířka layoutu: </span>'+d.layoutWidth;
+	return layCon;
+};
+d.makeEditableMenu=function()
+{
+	d.theMenu='<div id="menuId" style="position: fixed; bottom: 0px; width: 100%; height: 50px; background-color: black; color: white; display:none;"><div style="float:left; color: gray;"><span onclick="alert(d.help);" style="text-decoration:underline; color: white;">HELP</span>&nbsp;&nbsp;ID aktuální struktury: '+d.actualStructure+' &nbsp;&nbsp;Adresář obrázku: </div>'+'<textarea id="imagePath" style="float:left;" rows="1" cols="10">'+d.imgDir+"</textarea>"+'<div style="float:left; color:gray;"> &nbsp;&nbsp;Způsob pozicování: '+'</div><div id="positioningText" style="color: white; float: left;">'+d.positioningStrings[d.components[d.actualStructure][7]]+'</div><div style="float: left; color: gray;"> &nbsp;&nbsp;Soubor obrázku: </div><textarea id="imageSrc" rows="1" cols="10" style="float: left;">'+d.components[d.actualStructure][8]+'</textarea>&nbsp;&nbsp;'+d.layoutControlEditable()+'&nbsp;&nbsp;<a href="./index.html">Domovská stránka (en)</a></div>';
+	var me=d.find("menuHolder");
+	me.innerHTML=d.theMenu;
+};
+d.makeNoneditableMenu=function()
+{
+	d.theMenu='<div id="menuId" style="position: fixed; bottom: 0px; width: 100%; height: 50px; background-color: black; color: white; display:none;"><div style="float:left; color: gray;"><span onclick="alert(d.help);" style="text-decoration:underline; color: white;">HELP</span>&nbsp;&nbsp;ID aktuální struktury: '+d.actualStructure+' &nbsp;&nbsp;Adresář obrázku: </div>'+'<div style="float:left;">'+d.imgDir+"</div>"+'<div style="float:left; color:gray;"> &nbsp;&nbsp;Způsob pozicování: '+'</div><div id="positioningText" style="color: white; float: left;">'+d.positioningStrings[d.components[d.actualStructure][7]]+'</div><div style="float: left; color: gray;"> &nbsp;&nbsp;Soubor obrázku: </div><div id="imageSrc" style="color: white; float: left;">'+d.components[d.actualStructure][8]+'</div>&nbsp;&nbsp;'+d.layoutControlNonEditable()+'&nbsp;&nbsp;<a href="./index.html">Domovská stránka (en)</a></div>';
+	var me=d.find("menuHolder");
+	me.innerHTML=d.theMenu;
+};
+document.onmousemove=function(eve)
+{
+	var ef=window.event||eve;
+	d.mouseX=ef.pageX||ef.clientX;
+	d.mouseY=ef.pageY||ef.clientY;
+};
+document.onmousedown=function(eve) 
+{
+	var ef=window.event||eve;
+	d.lastDownX=ef.pageX||ef.clientX;
+	d.lastDownY=ef.pageY||ef.clientY;
+	if(d.moveMe){
+		d.nevimX=0-d.lastDownX+d.components[d.actualStructure][1];
+		d.nevimY=0-d.lastDownY+d.components[d.actualStructure][2];
+	}
+};
+document.onmouseup=function(eve) 
+{
+	var ef=window.event||eve;
+	d.lastUpX=ef.pageX||ef.clientX;
+	d.lastUpY=ef.pageY||ef.clientY;
+};
+d.keyboardHandlerFunction=function()
+{
+	//var hh=d.find(d.components[d.actualStructure][0]);
+	if(d.inArray(d.zmacklyCudliky,48)){
+		//hh.innerHTML += "0";
+	}
+	if(d.inArray(d.zmacklyCudliky,49)){
+		//hh.innerHTML += "1";
+	}
+	if(d.inArray(d.zmacklyCudliky,50)){
+		//hh.innerHTML += "2";
+	}
+	if(d.inArray(d.zmacklyCudliky,51)){
+		//hh.innerHTML += "3";
+	}
+	if(d.inArray(d.zmacklyCudliky,52)){
+		//hh.innerHTML += "4";
+	}
+	if(d.inArray(d.zmacklyCudliky,53)){
+		//hh.innerHTML += "5";
+	}
+	if(d.inArray(d.zmacklyCudliky,54)){
+		//hh.innerHTML += "6";
+	}
+	if(d.inArray(d.zmacklyCudliky,55)){
+		//hh.innerHTML += "7";
+	}
+	if(d.inArray(d.zmacklyCudliky,56)){
+		//hh.innerHTML += "8";
+	}
+	if(d.inArray(d.zmacklyCudliky,57)){
+		//hh.innerHTML += "9";
+	}
+	if(d.inArray(d.zmacklyCudliky,81)){
+		//hh.innerHTML += "q";
+		d.pixelPrecision=true;
+	}
+	if(d.inArray(d.zmacklyCudliky,87)){
+		//hh.innerHTML += "w";
+		d.moveVertically=true;
+		--d.speedVertically;
+	}
+	if(d.inArray(d.zmacklyCudliky,85)){
+		//hh.innerHTML += "u";
+		d.growVertically=true;
+		--d.growthVertically;
+	}
+	if(d.inArray(d.zmacklyCudliky,65)){
+		//hh.innerHTML += "a";
+		d.moveHorizontally=true;
+		--d.speedHorizontally;
+	}
+	if(d.inArray(d.zmacklyCudliky,83)){
+		//hh.innerHTML += "s";
+		d.moveVertically=true;
+		++d.speedVertically;
+	}
+	if(d.inArray(d.zmacklyCudliky,68)){
+		//hh.innerHTML += "d";
+		d.moveHorizontally=true;
+		++d.speedHorizontally;
+	}
+	if(d.inArray(d.zmacklyCudliky,70)){
+		//hh.innerHTML += "f";
+	}
+	if(d.inArray(d.zmacklyCudliky,71)){
+		//hh.innerHTML += "g";
+	}
+	if(d.inArray(d.zmacklyCudliky,72)){
+		//hh.innerHTML += "h";
+		d.growHorizontally=true;
+		--d.growthHorizontally;
+	}
+	if(d.inArray(d.zmacklyCudliky,74)){
+		//hh.innerHTML += "j";
+		d.growVertically=true;
+		++d.growthVertically;
+	}
+	if(d.inArray(d.zmacklyCudliky,75)){
+		//hh.innerHTML += "k";
+		d.growHorizontally=true;
+		++d.growthHorizontally;
+	}
+	if(d.inArray(d.zmacklyCudliky,76)){
+		//hh.innerHTML += "l";
+	}
+
+	if(d.inArray(d.zmacklyCudliky,90)){
+		//hh.innerHTML += "z";
+	}
+	if(d.inArray(d.zmacklyCudliky,88)){
+		//hh.innerHTML += "x";
+	}
+	if(d.inArray(d.zmacklyCudliky,67)){
+		//hh.innerHTML += "c";
+	}
+	if(d.inArray(d.zmacklyCudliky,86)){
+		//hh.innerHTML += "v";
+	}
+	return true;
+};
+d.stopperFunction=function()
+{
+	if(!d.inArray(d.zmacklyCudliky,65)&&!d.inArray(d.zmacklyCudliky,68)){
+		//hh.innerHTML += "a";
+		//hh.innerHTML += "d";
+		d.moveHorizontally=false;
+		d.speedHorizontally=0;
+	}
+	if(!d.inArray(d.zmacklyCudliky,87)&&!d.inArray(d.zmacklyCudliky,83)){
+		//hh.innerHTML += "w";
+		//hh.innerHTML += "s";
+		d.moveVertically=false;
+		d.speedVertically=0;
+	}
+	if(!d.inArray(d.zmacklyCudliky,74)&&!d.inArray(d.zmacklyCudliky,85)){
+		//hh.innerHTML += "j";
+		//hh.innerHTML += "u";
+		d.growVertically=false;
+		d.growthVertically=0;
+	}
+	if(!d.inArray(d.zmacklyCudliky,72)&&!d.inArray(d.zmacklyCudliky,75)){
+		//hh.innerHTML += "h";
+		//hh.innerHTML += "k";
+		d.growHorizontally=false;
+		d.growthHorizontally=0;
+	}
+	if(!d.inArray(d.zmacklyCudliky,81)){
+		//hh.innerHTML += "q";
+		d.pixelPrecision=false;
+	}
+	if(!d.inArray(d.zmacklyCudliky,77)){
+		//hh.innerHTML += "m";
+	}
+	return true;
+};
+d.drawFunction = function()
+{
+	if(!d.doesTextEditation){
+		var ruit=d.find(d.root);
+		ruit.innerHTML=' ';
+		var divacisek=d.count(d.components);
+		d.theMenuFound=d.find("menuId");
+		if(d.showMenu){
+			d.theMenuFound.style.display="block";
+		} else {
+			d.theMenuFound.style.display="none";
+		}
+		if(!d.textMode){
+			var ru=d.find(d.root);
+			ru.style.display="block";
+			var te=d.find("text");
+			te.style.display="none";
+			var diy=0;
+			var toDisplay="";
+			if(d.centered){
+				toDisplay+='<div id="layout">';
+			}
+			for(;diy<divacisek;){
+				toDisplay+=d.createDivak(diy,false);
+				var divacisko=d.find(d.components[diy][0]);
+				if(d.moveMe===true){
+					d.components[d.actualStructure][1]=d.mouseX+d.nevimX;
+					d.components[d.actualStructure][2]=d.mouseY+d.nevimY;
+				}
+				if(diy===d.actualStructure){
+					var positioningStuff=d.find("positioningText");
+					positioningStuff.innerHTML=d.positioningStrings[d.components[d.actualStructure][7]];
+					if(!d.pixelPrecision){
+						if(d.moveHorizontally===true){
+							d.components[d.actualStructure][1]+=d.speedHorizontally;
+						}
+						if(d.moveVertically===true){
+							d.components[d.actualStructure][2]+=d.speedVertically;
+						}
+						if(d.growHorizontally===true){
+							if((d.components[d.actualStructure][3]+d.growthHorizontally)>0){
+								d.components[d.actualStructure][3]+=d.growthHorizontally;
+							}
+						}
+						if(d.growVertically===true){
+							if((d.components[d.actualStructure][4]+d.growthVertically)>0){
+								d.components[d.actualStructure][4]+=d.growthVertically;
+							}
+						}
+					}
+				}
+				++diy;
+			}
+			if(d.centered){
+				toDisplay+='</div>';
+			}
+			d.find("root").innerHTML=toDisplay;
+			if(d.centered){
+				d.find("layout").style.width=d.layoutWidth+"px";
+				d.find("layout").style.margin="0px auto";
+			}
+			var mmm=0;
+			for(;mmm<divacisek;){
+				var divacisko=d.find(d.components[mmm][0]);
+				divacisko.style.left=d.components[mmm][1]+"px";
+				divacisko.style.top=d.components[mmm][2]+"px";
+				divacisko.style.width=d.components[mmm][3]+"px";
+				divacisko.style.height=d.components[mmm][4]+"px";
+				++mmm;
+			}
+		} else {
+			if(!d.textDrawingFinished){
+				var ru=d.find(d.root);
+				ru.style.display="none";
+				var textDiv=d.find("text");
+				textDiv.innerHTML=' ';
+				textDiv.style.display="block";
+				textDiv.innerHTML+="<pre>";
+				textDiv.innerHTML+=d.hatmatilkaSpecialChars('<html>');
+				textDiv.innerHTML+="<br/>";
+				textDiv.innerHTML+=d.hatmatilkaSpecialChars('<head>');
+				textDiv.innerHTML+="<br/>";
+				textDiv.innerHTML+=d.hatmatilkaSpecialChars('<title>Tvůj title</title>');
+				textDiv.innerHTML+="<br/>";
+				textDiv.innerHTML+=d.hatmatilkaSpecialChars('<style type="text/css">')+"<br/>";
+				textDiv.innerHTML+=d.hatmatilkaSpecialChars('*{margin:0px;padding:0px;border:none;}');
+				textDiv.innerHTML+="<br/>";
+				if(d.centred){
+					textDiv.innerHTML+=d.hatmatilkaSpecialChars('#layout{width:'+d.layoutWidth+'px;margin:0px auto;}');
+					textDiv.innerHTML+="<br/>";
+				}
+				for(var diyc=0;diyc<divacisek;++diyc){
+					var textRepresentatio=d.createCSS(diyc);
+					textDiv.innerHTML+=textRepresentatio;
+				}
+				textDiv.innerHTML+=d.hatmatilkaSpecialChars('</style>');
+				textDiv.innerHTML+="<br/>";
+				textDiv.innerHTML+=d.hatmatilkaSpecialChars('</head>');
+				textDiv.innerHTML+="<br/>";
+				textDiv.innerHTML+=d.hatmatilkaSpecialChars('<body>');
+				textDiv.innerHTML+="<br/>";
+				if(d.centred){
+					textDiv.innerHTML+=d.hatmatilkaSpecialChars('<div id="layout">');
+					textDiv.innerHTML+="<br/>";
+				}
+				var diy=0;
+				for(;diy<divacisek;){
+					var textRepresentation=d.createHTML(diy);
+					textDiv.innerHTML+=textRepresentation;
+					++diy;
+				}
+				if(d.centred){
+					textDiv.innerHTML+=d.hatmatilkaSpecialChars('</div>');
+					textDiv.innerHTML+="<br/>";
+				}
+				textDiv.innerHTML+=d.hatmatilkaSpecialChars("<!--Created using WDPT from wdpt.eu. Don't remove this HTML comment!-->");
+				textDiv.innerHTML+="<br/>";
+				textDiv.innerHTML+=d.hatmatilkaSpecialChars('</body>');
+				textDiv.innerHTML+="<br/>";
+				textDiv.innerHTML+=d.hatmatilkaSpecialChars('</html>');
+				textDiv.innerHTML+="<br/>";
+				textDiv.innerHTML+="</pre>";
+				textDiv.innerHTML+="<br/>";
+				textDiv.innerHTML+="<br/>";
+				textDiv.innerHTML+="Výše uvedený text (HTML markup, CSS kód, texty...) je uvolněn do public domain.";
+				d.textDrawingFinished=true;
+			}
+		}
+	}
+	if(d.startTextEditation===true){
+		var textareaContent=d.find("textarea_"+d.components[d.actualStructure][0]);
+		if(textareaContent){
+			if(textareaContent.select){
+				textareaContent.select();
+			} 
+			if(textareaContent.focus){
+				textareaContent.focus();
+			} 
+		}
+		d.startTextEditation=false;
+	}
+	return true;
+};
+d.hatmatilkaSpecialChars=function(htmlCode)
+{
+	htmlCode=htmlCode.replace('</','&lt;/');
+	htmlCode=htmlCode.replace('/>','/&gt;');
+	htmlCode=htmlCode.replace('<','&lt;');
+	htmlCode=htmlCode.replace('>','&gt;');
+	return htmlCode;
+};
+d.createHTML=function(positio){
+	var contentString='';
+	if(d.components[positio][6]!==-1){
+		contentString=d.hatmatilkaSpecialChars(d.components[positio][5]);
+	}else{
+		contentString=d.hatmatilkaSpecialChars(d.singleE('img','img_'+d.components[positio][0],'id="img_'+positio+'" src="'+d.imgDir+'/'+d.components[positio][8]+'" alt="'+d.components[positio][5]+'"'));
+	}
+	var result=d.hatmatilkaSpecialChars('<div id="div_'+positio+'">')+"<br/>&nbsp;&nbsp;"+contentString+"<br/>"+d.hatmatilkaSpecialChars('</div>')+"<br/>";
+	return result;
+};
+d.createCSS=function(positio){
+	var contentString='#div_'+positio+'{'+'<br/>';
+	var colorAdString='';
+	if(d.components[positio][6]!==-1){
+		if(d.components[positio][6]===-2){
+			colorAdString='background-image:url("'+d.imgDir+'/'+d.components[positio][8]+'");';
+		}else{
+			colorAdString='background-color:'+d.colorz[d.components[positio][6]]+';';
+		}
+	}
+	contentString+='&nbsp;&nbsp;'+d.positioningStrings[d.components[positio][7]]+'width:'+d.components[positio][3]+'px;height:'+d.components[positio][4]+'px;left:'+d.components[positio][1]+'px;top:'+d.components[positio][2]+'px;'+colorAdString;
+	if(d.components[positio][6]===-1){
+		contentString+="<br/>}";
+		contentString+='<br/>#img_'+positio+'{'+'<br/>';
+		contentString+='&nbsp;&nbsp;width:'+d.components[positio][3]+'px;height:'+d.components[positio][4]+'px;';
+	}
+	contentString+="<br/>}<br/>";
+	return contentString;
+};
+d.createDivak=function(positionInStructuresArray,adik)
+{
+	if(adik){
+		var adMouseStuff='';
+	} else {
+		var adMouseStuff=' onmousedown="d.moveMe=true;d.actualStructure='+positionInStructuresArray+';d.makeNoneditableMenu();" onmouseup="d.moveMe=false;"';
+	}
+	if(d.components[positionInStructuresArray][6]===-1){
+		var colorAdString='';
+		var contentString=d.singleE('img','img_'+d.components[positionInStructuresArray][0],'src="'+d.imgDir+'/'+d.components[positionInStructuresArray][8]+'" alt="'+d.components[positionInStructuresArray][5]+'" style="width: '+d.components[positionInStructuresArray][3]+'px; height: '+d.components[positionInStructuresArray][4]+'px;"'+adMouseStuff);
+	}else if(d.components[positionInStructuresArray][6]===-2){
+		var colorAdString=' background-image:url('+d.imgDir+'/'+d.components[positionInStructuresArray][8]+');';
+		var contentString=d.components[positionInStructuresArray][5];
+	}else{
+		var colorAdString=' background-color:'+d.colorz[d.components[positionInStructuresArray][6]]+';';
+		var contentString=d.components[positionInStructuresArray][5];
+	}
+	if(adik){
+		contentString=d.hatmatilkaSpecialChars(contentString);
+	}
+	var divak=d.doubleE('div',contentString,d.components[positionInStructuresArray][0],'style="'+d.positioningStrings[d.components[positionInStructuresArray][7]]+' width: '+d.components[positionInStructuresArray][3]+'px; height: '+d.components[positionInStructuresArray][4]+'px; left: '+d.components[positionInStructuresArray][1]+'px; top: '+d.components[positionInStructuresArray][2]+'px;'+colorAdString+'"'+adMouseStuff);
+	if(adik){
+		divak=d.hatmatilkaSpecialChars(divak);
+	}
+	return divak;
+};
+d.wdpt=function()
+{
+	d.actualStructure=0;
+	d.textMode=false;
+	d.showMenu=false;
+	if(d.count(d.components)===0){
+		d.components=[["divak0"]];
+		// left
+		d.components[d.actualStructure][1]=0;
+		// top
+		d.components[d.actualStructure][2]=0;
+		// width
+		d.components[d.actualStructure][3]=300;
+		// height
+		d.components[d.actualStructure][4]=100;
+		// text content (img => alt text)
+		d.components[d.actualStructure][5]="použij m pro menu s help alertem.. líbí? Bitcoin: 1KG1CABoioqunp6t9TFPi4BawCAVZ4Kfbd";
+		// background-color ( -1 => img)
+		d.components[d.actualStructure][6]=1;
+		// positioning string
+		d.components[d.actualStructure][7]=1;
+		// src string
+		d.components[d.actualStructure][8]='foo.jpg';
+	}
+	d.speedHorizontally=0;
+	d.speedVertically=0;
+	d.growthHorizontally=0;
+	d.growthVertically=0;
+	d.lastUpX=0;
+	d.lastUpY=0;
+	d.lastDownX=0;
+	d.lastDownY=0;
+	d.makeNoneditableMenu();
+	document.onkeyup=d.keyup;
+	document.onkeydown=d.keydown;
+	d.khf=MOOPH.createPseudoThread();
+	d.stop=MOOPH.createPseudoThread();
+	d.draw=MOOPH.createPseudoThread();
+	d.sij=MOOPH.createPseudoThread();
+	d.khf.setFunction(d.keyboardHandlerFunction);
+	d.stop.setFunction(d.stopperFunction);
+	d.draw.setFunction(d.drawFunction);
+	d.sij.setFunction(d.saveInJSON);
+	d.khf.setMeasuredDelay(40);
+	d.khf.start();
+	d.stop.start();
+	d.draw.start();
+	d.sij.start();
+
+};
+d.wdpt();
+//--><!]]>
+</script>
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-55224288-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>
+</head>
